@@ -39,10 +39,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Google Chrome (latest stable version)
-RUN wget -q --tries=3 --timeout=30 https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb || { echo "Failed to download Chrome"; exit 1; } && \
+RUN curl -fsSL -o chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
     apt-get update && \
-    apt-get install -y -f ./google-chrome-stable_current_amd64.deb && \
-    rm google-chrome-stable_current_amd64.deb && \
+    apt-get install -y -f ./chrome.deb && \
+    rm chrome.deb && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 22
