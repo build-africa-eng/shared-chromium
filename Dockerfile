@@ -4,20 +4,31 @@ FROM ubuntu:24.04
 # Metadata for the image
 LABEL maintainer="africanfuture@gmail.com" \
       description="Base image with Google Chrome and Node.js 22 for Puppeteer-based Render services" \
-      version="1.0"
+      version="1.1"
 
 # Set non-interactive frontend to avoid prompts during package installation
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Update package lists
-RUN apt-get update && apt-get upgrade -y && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install core dependencies for Chrome and Puppeteer
+# Update package lists and install base dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    curl \
+    wget \
+    gpg \
+    ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Google Chrome and its dependencies
+RUN apt-get update && \
+    # Add Google's official signing key
+    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome-keyring.gpg && \
+    # Add the Google Chrome repository
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
+    # Update package lists and install Chrome and Puppeteer dependencies
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        google-chrome-stable \
         fonts-liberation \
-        libayatana-appindicator3-1 \
         libasound2t64 \
         libatk-bridge2.0-0t64 \
         libatk1.0-0t64 \
@@ -30,20 +41,12 @@ RUN apt-get update && \
         libxcomposite1 \
         libxdamage1 \
         libxrandr2 \
-        xdg-utils \
-        libgbm1 \
         libxss1 \
+        libgbm1 \
         libxkbcommon0 \
-        wget \
-        curl && \
-    apt-get install -y -f && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install Google Chrome (latest stable version)
-RUN curl -fsSL -o chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    apt-get update && \
-    apt-get install -y -f ./chrome.deb && \
-    rm chrome.deb && \
+        libayatana-appindicator3-1 \
+        xdg-utils && \
+    # Clean up
     rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 22
