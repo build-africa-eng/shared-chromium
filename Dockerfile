@@ -33,6 +33,7 @@ RUN apt-get update && \
         xdg-utils \
         libgbm1 \
         libxss1 \
+        libxkbcommon0 \
         wget \
         curl && \
     apt-get install -y -f && \
