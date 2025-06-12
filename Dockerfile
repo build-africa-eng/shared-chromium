@@ -1,9 +1,9 @@
 FROM ubuntu:22.04
 
 LABEL maintainer="afrcanfuture@gmail.com" \
-      description="Chromium + Node.js + Puppeteer dependencies for Render compatibility"
+      description="Chromium + Node.js 22 + Puppeteer dependencies for Render compatibility"
 
-# Install dependencies and Chromium in a single layer
+# Install dependencies and Google Chrome in a single layer
 RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-liberation \
     libappindicator3-1 \
@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
+    libgbm1 \
     wget \
     curl \
     && wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
@@ -27,8 +28,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm google-chrome-stable_current_amd64.deb \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js (setup script and install in one RUN)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+# Install Node.js 22
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
 
