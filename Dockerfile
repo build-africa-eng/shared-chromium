@@ -2,7 +2,7 @@
 FROM ubuntu:24.04
 
 # Metadata for the image
-LABEL maintainer="afrcanfuture@gmail.com" \
+LABEL maintainer="africanfuture@gmail.com" \
       description="Base image with Google Chrome and Node.js 22 for Puppeteer-based Render services" \
       version="1.0"
 
@@ -14,10 +14,10 @@ RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
         fonts-liberation \
         libayatana-appindicator3-1 \
-        libasound2 \
+        libasound2t64 \
         libatk-bridge2.0-0 \
         libatk1.0-0 \
-        libcups2 \
+        libcups2t64 \
         libdbus-1-3 \
         libgdk-pixbuf-2.0-0 \
         libnspr4 \
