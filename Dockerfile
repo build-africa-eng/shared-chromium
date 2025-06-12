@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:25.04
 
 LABEL maintainer="afrcanfuture@gmail.com" \
       description="Chromium + Node.js 22 + Puppeteer dependencies for Render compatibility"
