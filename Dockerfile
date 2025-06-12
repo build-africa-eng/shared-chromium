@@ -9,14 +9,18 @@ LABEL maintainer="africanfuture@gmail.com" \
 # Set non-interactive frontend to avoid prompts during package installation
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Update package lists and install core dependencies
+# Update package lists
 RUN apt-get update && apt-get upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install core dependencies for Chrome and Puppeteer
+RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         fonts-liberation \
         libayatana-appindicator3-1 \
         libasound2t64 \
-        libatk-bridge2.0-0 \
-        libatk1.0-0 \
+        libatk-bridge2.0-0t64 \
+        libatk1.0-0t64 \
         libcups2t64 \
         libdbus-1-3 \
         libgdk-pixbuf-2.0-0 \
@@ -31,13 +35,14 @@ RUN apt-get update && apt-get upgrade -y && \
         libxss1 \
         wget \
         curl && \
+    apt-get install -y -f && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Google Chrome (pinned version for reproducibility)
-RUN wget -q https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_126.0.6478.126-1_amd64.deb && \
+# Install Google Chrome (latest stable version)
+RUN wget -q --tries=3 --timeout=30 https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb || { echo "Failed to download Chrome"; exit 1; } && \
     apt-get update && \
-    apt-get install -y -f ./google-chrome-stable_126.0.6478.126-1_amd64.deb && \
-    rm google-chrome-stable_126.0.6478.126-1_amd64.deb && \
+    apt-get install -y -f ./google-chrome-stable_current_amd64.deb && \
+    rm google-chrome-stable_current_amd64.deb && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 22
